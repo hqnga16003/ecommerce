@@ -1,5 +1,4 @@
 import 'package:ecommerce_app/model/product.dart';
-import 'package:ecommerce_app/model/product_discount.dart';
 import 'package:ecommerce_app/presentation/screen/main/home/home_bloc/home_event.dart';
 import 'package:ecommerce_app/presentation/screen/main/home/home_bloc/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

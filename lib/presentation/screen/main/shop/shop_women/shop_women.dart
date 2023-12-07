@@ -11,7 +11,7 @@ class ShopWomenTabBarView extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Padding(
-      padding: EdgeInsets.all(size.width * 0.050),
+      padding: EdgeInsets.only(top: size.width * 0.050,left: size.width * 0.050,right: size.width * 0.050),
       child: Column(
         children: [
           ClipRRect(
@@ -41,7 +41,7 @@ class ShopWomenTabBarView extends StatelessWidget {
                   ],
                 )),
           ),
-          const Gap(10),
+          const Gap(15),
           _cardCategories(size, "New", AppAssets.imgNew),
           const Gap(10),
           _cardCategories(size, "Clothes", AppAssets.imgClothes),
@@ -59,24 +59,30 @@ class ShopWomenTabBarView extends StatelessWidget {
     style: const TextStyle(
         fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
   );
-  _cardCategories(Size size, String title, String img) => ClipRRect(
+  _cardCategories(Size size, String title, String img) => Container(  decoration: BoxDecoration(
+    color: Colors.white,
     borderRadius: BorderRadius.circular(10),
-    child: Container(
-        height: size.height * 0.13,
-        width: size.width,
-        color: Colors.white,
-        child: Row(
-          children: [
-            Expanded(
-                child: Padding(
-                    padding: EdgeInsets.only(left: size.width * 0.050),
-                    child: _textCategories(title))),
-            Expanded(
-                child: Image.asset(
-                  img,
-                  fit: BoxFit.fill,
-                )),
-          ],
-        )),
-  );
+    boxShadow: [
+      BoxShadow(
+        offset: Offset(0, 3),
+        blurRadius: 5,
+        color: Colors.black.withOpacity(0.2),
+      ),
+    ],
+  ),
+      height: size.height * 0.13,
+      width: size.width,
+      child: Row(
+        children: [
+          Expanded(
+              child: Padding(
+                  padding: EdgeInsets.only(left: size.width * 0.050),
+                  child: _textCategories(title))),
+          Expanded(
+              child: Image.asset(
+                img,
+                fit: BoxFit.fill,
+              )),
+        ],
+      ));
 }

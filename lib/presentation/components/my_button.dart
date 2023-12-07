@@ -1,4 +1,5 @@
 import 'package:easy_loading_button/easy_loading_button.dart';
+import 'package:ecommerce_app/app/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,7 @@ class ButtonDefault extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30))),
             onPressed: onPressed,
-            child: TextButtonDefault(text: text,color: Colors.white,)));
+            child: TextButtonDefault(text: text,color: AppColors.whiteColor,)));
   }
 }
 

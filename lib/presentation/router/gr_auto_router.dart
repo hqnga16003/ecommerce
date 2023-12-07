@@ -22,3 +22,11 @@ class FiltersNavigation extends BaseNavigationScreen {
   const FiltersNavigation({super.key});
 
 }
+
+
+
+@RoutePage()
+class ProfileNavigation extends BaseNavigationScreen {
+  const ProfileNavigation({super.key});
+
+}

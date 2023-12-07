@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:ecommerce_app/app/app_assets.dart';
+import 'package:ecommerce_app/app/app_colors.dart';
 import 'package:ecommerce_app/main.dart';
 import 'package:ecommerce_app/presentation/components/app_bar.dart';
 import 'package:ecommerce_app/presentation/router/AppRouter.gr.dart';
@@ -9,7 +10,6 @@ import 'package:ecommerce_app/presentation/screen/main/shop/bloc/shop_event.dart
 import 'package:ecommerce_app/presentation/screen/main/shop/shop_kids/shop_kids.dart';
 import 'package:ecommerce_app/presentation/screen/main/shop/shop_men/shop_men.dart';
 import 'package:ecommerce_app/presentation/screen/main/shop/shop_women/shop_women.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/locator/locator.dart';
@@ -27,20 +27,18 @@ class _ShopScreenState extends State<ShopScreen> {
 
   @override
   void initState() {
-    shopBloc.add(GetAllCategories());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return Scaffold(
+    return Scaffold(backgroundColor: AppColors.backgroundColor,
       appBar: MyAppBar(
         title: "Categories",
         icon: const Icon(Icons.search),
         onPressedSearch: () {
           AutoRouter.of(context)
-              .push(ShopSearch(listCategory: shopBloc.listCategories));
+              .push(ShopSearch());
         },
       ),
       body: DefaultTabController(
@@ -49,7 +47,7 @@ class _ShopScreenState extends State<ShopScreen> {
         child: Scaffold(
           appBar: AppBar(
             titleSpacing: 0,
-            backgroundColor: const Color(0xffF9F9F9),
+            backgroundColor:  Colors.white,
             elevation: 0,
             title: const TabBar(
               labelColor: Colors.black,

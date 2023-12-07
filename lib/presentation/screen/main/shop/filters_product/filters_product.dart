@@ -7,6 +7,7 @@ import 'package:ecommerce_app/presentation/components/my_text.dart';
 import 'package:ecommerce_app/presentation/router/AppRouter.gr.dart';
 import 'package:ecommerce_app/presentation/screen/main/shop/bloc/shop_event.dart';
 import 'package:ecommerce_app/presentation/screen/main/shop/bloc/shop_state.dart';
+import 'package:ecommerce_app/presentation/screen/main/shop/filters_product/bloc/filters_product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -18,20 +19,29 @@ import '../bloc/shop_bloc.dart';
 
 @RoutePage()
 class FiltersProduct extends StatefulWidget {
-  const FiltersProduct({super.key,});
-
+  const FiltersProduct({
+    super.key,
+  });
 
   @override
   State<FiltersProduct> createState() => _FiltersProductState();
 }
 
 class _FiltersProductState extends State<FiltersProduct> {
-   SfRangeValues _values =  SfRangeValues(10.0, 18.0);
+  SfRangeValues _values = const SfRangeValues(0.0, 100.0);
 
   final ShopBloc shopBloc = getIt<ShopBloc>();
+  final FiltersProductBloc filtersProductBloc = getIt<FiltersProductBloc>();
+
+  @override
+  void initState() {
+    super.initState();
+    filtersProductBloc.add(GetAllBrandEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
+    filtersProductBloc.add(InitFiltersEvent());
     final size = MediaQuery.of(context).size;
     const TextStyle textStyle = TextStyle(
         color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16);
@@ -62,27 +72,30 @@ class _FiltersProductState extends State<FiltersProduct> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ButtonOutlineDefault(
-                  width: size.width * 0.4, text: "Discard", onPressed: () {}),
+                  width: size.width * 0.4,
+                  text: "Discard",
+                  onPressed: () {
+                    filtersProductBloc.add(DiscardFiltersEvent());
+                  }),
               ButtonDefault(
                   width: size.width * 0.4,
                   text: "Apply",
-                  onPressed: () {
-                    shopBloc.add(
-                        FiltersListProductEvent(_values.start, _values.end));
+                  onPressed: ()  {
+                    shopBloc.add(FiltersProductsEvent(
+                        _values.start,
+                        _values.end,
+                        filtersProductBloc.colors,
+                        filtersProductBloc.sizes,
+                        filtersProductBloc.categories,
+                        filtersProductBloc.brands));
 
-                    //AutoRouter.of(context).push(ProductCategory(title: widget.title));
+                    AutoRouter.of(context).pop();
                   }),
             ],
           ),
         ),
       ),
-      body: BlocListener(
-        bloc: shopBloc,
-        listener: (BuildContext context, state) {
-          if(state is FilteredProductsState){
-            AutoRouter.of(context).pop();
-          }
-        },
+      body: SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(
               padding: EdgeInsets.symmetric(
@@ -93,9 +106,10 @@ class _FiltersProductState extends State<FiltersProduct> {
             width: size.width,
             color: Colors.white,
             child: MySlider(
-              values: _values, valuesChange: (value ) {
+              values: _values,
+              valuesChange: (value) {
                 _values = value;
-            },
+              },
             ),
           ),
           Padding(
@@ -113,21 +127,63 @@ class _FiltersProductState extends State<FiltersProduct> {
                 children: [
                   _ItemChooseColor(
                     color: const Color(0xff020202),
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddColorsEvent("Black"));
+                      } else {
+                        filtersProductBloc.add(RemoveColorEvent("Black"));
+                      }
+                    },
                   ),
                   _ItemChooseColor(
                     color: const Color(0xffF6F6F6),
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddColorsEvent("White"));
+                      } else {
+                        filtersProductBloc.add(RemoveColorEvent("White"));
+                      }
+                    },
                   ),
                   _ItemChooseColor(
                     color: const Color(0xffB82222),
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddColorsEvent("Red"));
+                      } else {
+                        filtersProductBloc.add(RemoveColorEvent("Red"));
+                      }
+                    },
                   ),
                   _ItemChooseColor(
                     color: const Color(0xffBEA9A9),
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddColorsEvent("Brown"));
+                      } else {
+                        filtersProductBloc.add(RemoveColorEvent("Brown"));
+                      }
+                    },
                   ),
                   _ItemChooseColor(
                     color: const Color(0xffE2BB8D),
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddColorsEvent("Yellow"));
+                      } else {
+                        filtersProductBloc.add(RemoveColorEvent("Yellow"));
+                      }
+                    },
                   ),
                   _ItemChooseColor(
                     color: const Color(0xff151867),
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddColorsEvent("Blue"));
+                      } else {
+                        filtersProductBloc.add(RemoveColorEvent("Blue"));
+                      }
+                    },
                   )
                 ],
               ),
@@ -143,17 +199,72 @@ class _FiltersProductState extends State<FiltersProduct> {
             color: Colors.white,
             child: Padding(
               padding: EdgeInsets.all(size.width * 0.05),
-              child: const Row(
+              child: Row(
                 children: [
-                  ItemChoose(title: "XS", width: 50, height: 50),
-                  Gap(10),
-                  ItemChoose(title: "S", width: 50, height: 50),
-                  Gap(10),
-                  ItemChoose(title: "M", width: 50, height: 50),
-                  Gap(10),
-                  ItemChoose(title: "L", width: 50, height: 50),
-                  Gap(10),
-                  ItemChoose(title: "XL", width: 50, height: 50),
+                  ItemChoose(
+                    title: "XS",
+                    width: 50,
+                    height: 50,
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddSizeEvent("XS"));
+                      } else {
+                        filtersProductBloc.add(RemoveSizeEvent("XS"));
+                      }
+                    },
+                  ),
+                  const Gap(10),
+                  ItemChoose(
+                    title: "S",
+                    width: 50,
+                    height: 50,
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddSizeEvent("S"));
+                      } else {
+                        filtersProductBloc.add(RemoveSizeEvent("S"));
+                      }
+                    },
+                  ),
+                  const Gap(10),
+                  ItemChoose(
+                    title: "M",
+                    width: 50,
+                    height: 50,
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddSizeEvent("M"));
+                      } else {
+                        filtersProductBloc.add(RemoveSizeEvent("M"));
+                      }
+                    },
+                  ),
+                  const Gap(10),
+                  ItemChoose(
+                    title: "L",
+                    width: 50,
+                    height: 50,
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddSizeEvent("L"));
+                      } else {
+                        filtersProductBloc.add(RemoveSizeEvent("L"));
+                      }
+                    },
+                  ),
+                  const Gap(10),
+                  ItemChoose(
+                    title: "XL",
+                    width: 50,
+                    height: 50,
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddSizeEvent("XL"));
+                      } else {
+                        filtersProductBloc.add(RemoveSizeEvent("XL"));
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
@@ -173,15 +284,65 @@ class _FiltersProductState extends State<FiltersProduct> {
                 spacing: 10.0,
                 children: <Widget>[
                   ItemChoose(
-                      title: "All", width: size.width * 0.25, height: 50),
+                    title: "All",
+                    width: size.width * 0.25,
+                    height: 50,
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddCategoryEvent("All"));
+                      } else {
+                        filtersProductBloc.add(RemoveCategoryEvent("All"));
+                      }
+                    },
+                  ),
                   ItemChoose(
-                      title: "Women", width: size.width * 0.25, height: 50),
+                    title: "Women",
+                    width: size.width * 0.25,
+                    height: 50,
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddCategoryEvent("Women"));
+                      } else {
+                        filtersProductBloc.add(RemoveCategoryEvent("Women"));
+                      }
+                    },
+                  ),
                   ItemChoose(
-                      title: "Men", width: size.width * 0.25, height: 50),
+                    title: "Men",
+                    width: size.width * 0.25,
+                    height: 50,
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddCategoryEvent("Men"));
+                      } else {
+                        filtersProductBloc.add(RemoveCategoryEvent("Men"));
+                      }
+                    },
+                  ),
                   ItemChoose(
-                      title: "Boys", width: size.width * 0.25, height: 50),
+                    title: "Boys",
+                    width: size.width * 0.25,
+                    height: 50,
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddCategoryEvent("Boys"));
+                      } else {
+                        filtersProductBloc.add(RemoveCategoryEvent("Boys"));
+                      }
+                    },
+                  ),
                   ItemChoose(
-                      title: "Girls", width: size.width * 0.25, height: 50)
+                    title: "Girls",
+                    width: size.width * 0.25,
+                    height: 50,
+                    onTap: (value) {
+                      if (value) {
+                        filtersProductBloc.add(AddCategoryEvent("Girls"));
+                      } else {
+                        filtersProductBloc.add(RemoveCategoryEvent("Girls"));
+                      }
+                    },
+                  )
                 ],
               ),
             ),
@@ -199,7 +360,8 @@ class _FiltersProductState extends State<FiltersProduct> {
                       const Text("Brand", style: textStyle),
                       InkWell(
                         onTap: () {
-                          AutoRouter.of(context).push(const Branch());
+                          AutoRouter.of(context).push(
+                              Brand(brands: filtersProductBloc.listBrands));
                         },
                         child: const Icon(
                           Icons.arrow_forward_ios,
@@ -209,29 +371,57 @@ class _FiltersProductState extends State<FiltersProduct> {
                     ],
                   ),
                   const Gap(5),
-                  const TextSub(
-                      text: "adidas Originals, Jack & Jones, s.Oliver",
-                      color: Color(0xff9B9B9B))
+                  BlocConsumer(listener: (context, state) {
+                    if(state is DiscardState){
+                      AutoRouter.of(context).pop();
+                    }
+                  },
+                    bloc: filtersProductBloc,
+                    builder: (context, state) {
+                      if (state is SubmittedBrandState) {
+                        return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: TextSub(
+                                text: state.brands,
+                                color: const Color(0xff9B9B9B)));
+                      }
+
+                      if (state is DiscardState) {
+                        return const SizedBox();
+                      }
+
+                      return const SizedBox();
+                    },
+                  )
                 ],
               ))
         ]),
       ),
     );
   }
+
+  void clickItem(bool value, String item, List<String> list) {
+    if (value) {
+      list.add(item);
+    } else {
+      list.remove(item);
+    }
+  }
 }
 
 class _ItemChooseColor extends StatefulWidget {
-  _ItemChooseColor({super.key, required this.color});
+  _ItemChooseColor({super.key, required this.color, required this.onTap});
+
+  bool isChoose = false;
 
   final Color color;
+  final Function(bool) onTap;
 
   @override
   State<_ItemChooseColor> createState() => _ItemChooseColorState();
 }
 
 class _ItemChooseColorState extends State<_ItemChooseColor> {
-  bool isChoose = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -239,7 +429,8 @@ class _ItemChooseColorState extends State<_ItemChooseColor> {
           borderRadius: BorderRadius.circular(70),
           color: Colors.transparent,
           border: Border.all(
-            color: isChoose ? const Color(0xffDB3022) : Colors.transparent,
+            color:
+                widget.isChoose ? const Color(0xffDB3022) : Colors.transparent,
             width: 1.0,
           )),
       width: 55,
@@ -249,7 +440,8 @@ class _ItemChooseColorState extends State<_ItemChooseColor> {
       child: InkWell(
         onTap: () {
           setState(() {
-            isChoose = !isChoose;
+            widget.isChoose = !widget.isChoose;
+            widget.onTap(widget.isChoose);
           });
         },
         child: ClipRRect(
@@ -323,7 +515,7 @@ class _MySliderState extends State<MySlider> {
           onChanged: (SfRangeValues values) {
             setState(() {
               widget.values = values;
-             widget.valuesChange(values);
+              widget.valuesChange(values);
             });
           },
         )

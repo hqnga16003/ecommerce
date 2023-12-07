@@ -1,71 +1,67 @@
-import 'package:ecommerce_app/model/category.dart';
+
 import 'package:ecommerce_app/model/product.dart';
-import 'package:ecommerce_app/model/product_discount.dart';
-import 'package:ecommerce_app/presentation/screen/main/home/home_bloc/home_event.dart';
-import 'package:ecommerce_app/presentation/screen/main/home/home_bloc/home_state.dart';
 import 'package:ecommerce_app/presentation/screen/main/shop/bloc/shop_event.dart';
 import 'package:ecommerce_app/presentation/screen/main/shop/bloc/shop_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-
 import '../../../../../data/firebase_firestore_repository.dart';
 
 @Singleton()
 @injectable
 class ShopBloc extends Bloc<ShopEvent, ShopState> {
   final FirebaseFireStoreRepository firebaseFireStoreRepository;
-  List<Category> listCategories = [];
   List<Product> listProduct = [];
+  String nameSort = "Price: lowest to high";
 
   ShopBloc(this.firebaseFireStoreRepository) : super(ShopState()) {
-    on<GetAllCategories>((event, emit) async {
+    on<GetProductsEvent>((event, emit) async {
+      nameSort = "Price: lowest to high";
+      emit(ProductsLoadingState());
       try {
-        emit(AllDataLoadingState());
-        listCategories = await firebaseFireStoreRepository.getAllCategories();
-        emit(AllDataLoadedState(listCategories));
+        listProduct = await firebaseFireStoreRepository
+            .getProductsByCategory(event.nameCategory);
+        emit(ProductsLoadedState(
+            listProduct, nameSort));
+
       } catch (e) {
-        emit(AllDataErrorState(e.toString()));
-      }
-    });
-    on<ChangeListViewProducts>((event, emit) async {
-      if (event.isGrid == true) {
-        emit(GridViewState());
-      } else {
-        emit(ListViewState());
+        emit(ProductsErrorState(e.toString()));
       }
     });
 
-    on<GetProductsByCategory>((event, emit) async {
-      listProduct = await firebaseFireStoreRepository
-          .getProductsByCategory(event.nameCategory);
-      emit(GetProductLoadedState(event.nameCategory));
+
+    on<ChangeViewProductsEvent>((event, emit) async {
+      emit(ProductsLoadingState());
+      emit(ProductsLoadedState(listProduct, nameSort));
     });
-    on<FiltersListProductEvent>((event, emit) async {
-      List<Product> filteredProducts = [];
-      for (var element in listProduct) {
-        if(element.priceProduct >= event.priceStart && element.priceProduct<=event.priceEnd){
-          filteredProducts.add(element);
-        }
-      }
-      emit(FilteredProductsState(filteredProducts));
-    });
-    on<SortListProductView>((event, emit) async {
+
+
+
+    on<SortListProductEvent>((event, emit) async {
       switch (event.nameSort) {
         case "Popular":
-          print("Popular");
+          nameSort = "Popular";
+          emit(ProductsLoadingState());
+          emit(ProductsLoadedState(listProduct, nameSort));
           break;
         case "Newest":
-          print("Newest");
+          nameSort = "Newest";
+          emit(ProductsLoadingState());
+          emit(ProductsLoadedState(listProduct, nameSort));
           break;
         case "Customer review":
+          nameSort = "Customer review";
+          emit(ProductsLoadingState());
           listProduct.sort((a, b) {
             return a.numberReviews.compareTo(b.numberReviews);
-
           });
-          emit(ProductSortListViewState(listProduct,"Customer review"));
+          emit(
+              ProductsLoadedState(listProduct, nameSort));
+
           break;
         case "Price: lowest to high":
+          nameSort = "Price: lowest to high";
 
+          emit(ProductsLoadingState());
 
           listProduct.sort((a, b) {
             double discountedPriceA =
@@ -78,12 +74,40 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
               return a.priceProduct.compareTo(b.priceProduct);
             }
           });
-          emit(ProductSortListViewState(listProduct,"Price: lowest to high"));
+          emit(ProductsLoadedState(
+              listProduct, nameSort));
           break;
         case "word-wrap: break-word":
-          print("word-wrap: break-word");
+          nameSort = "word-wrap: break-word";
+          emit(ProductsLoadingState());
+
+          emit(ProductsLoadedState(
+              listProduct, nameSort));
           break;
       }
     });
-  }
+  //
+    on<FiltersProductsEvent>((event, emit) async {
+      emit(ProductsLoadingState());
+      List<Product> filteredProducts = [];
+      for (var element in listProduct) {
+        if (element.priceProduct >= event.priceStart &&
+            element.priceProduct <= event.priceEnd) {
+          if(event.brands.isNotEmpty){
+            if(event.brands.contains(element.branchProduct)){
+              filteredProducts.add(element);
+            }
+          }else{
+            filteredProducts.add(element);
+
+          }
+        }
+      }
+      listProduct = filteredProducts;
+      emit(ProductsLoadedState(
+          filteredProducts, nameSort));
+    });
+   }
+
+
 }

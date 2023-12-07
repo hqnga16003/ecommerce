@@ -117,9 +117,22 @@ class TextBottomSheet extends StatelessWidget {
     return Text(
       text,
       style: const TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-          fontSize: 18),
+          color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+    );
+  }
+}
+
+class TextSize34 extends StatelessWidget {
+  const TextSize34({super.key, required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: const TextStyle(
+          color: Colors.black, fontWeight: FontWeight.w700, fontSize: 34),
     );
   }
 }

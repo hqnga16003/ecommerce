@@ -18,7 +18,7 @@ import 'home_page_first/home_page_first.dart';
 
 @RoutePage()
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

@@ -2,25 +2,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ItemChoose extends StatefulWidget {
-  const ItemChoose({super.key, required this.title, required this.width, required this.height});
+  ItemChoose(
+      {super.key,
+      required this.title,
+      required this.width,
+      required this.height,
+      required this.onTap});
+
+  bool isChoose = false;
 
   final String title;
   final double width, height;
+  final Function(bool) onTap;
 
   @override
   State<ItemChoose> createState() => _ItemCategoryState();
 }
 
 class _ItemCategoryState extends State<ItemChoose> {
-  bool isChoose = false;
-
   @override
   Widget build(BuildContext context) {
-
     return InkWell(
       onTap: () {
         setState(() {
-          isChoose = !isChoose;
+          widget.isChoose = !widget.isChoose;
+          widget.onTap(widget.isChoose);
         });
       },
       child: Container(
@@ -28,9 +34,13 @@ class _ItemCategoryState extends State<ItemChoose> {
           height: widget.height,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: isChoose ? const Color(0xffDB3022) : Colors.transparent,
+              color: widget.isChoose
+                  ? const Color(0xffDB3022)
+                  : Colors.transparent,
               border: Border.all(
-                color: isChoose ? Colors.transparent : const Color(0xff9B9B9B),
+                color: widget.isChoose
+                    ? Colors.transparent
+                    : const Color(0xff9B9B9B),
                 width: 1.0,
               )),
           child: Center(
@@ -39,7 +49,7 @@ class _ItemCategoryState extends State<ItemChoose> {
               style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
-                  color: isChoose ? Colors.white : Colors.black),
+                  color: widget.isChoose ? Colors.white : Colors.black),
             ),
           )),
     );

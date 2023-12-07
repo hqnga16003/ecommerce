@@ -1,5 +1,4 @@
 
-import 'package:ecommerce_app/model/product_discount.dart';
 
 import '../../../../../model/product.dart';
 

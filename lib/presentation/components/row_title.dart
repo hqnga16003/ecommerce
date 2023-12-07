@@ -33,7 +33,6 @@ class RowTitle extends StatelessWidget {
                       text: "View all", color: Color(0xff222222))),
             ],
           ),
-          const Gap(5),
           TextSub(text: subTitle, color: const Color(0xff9B9B9B)),
         ],
       ),

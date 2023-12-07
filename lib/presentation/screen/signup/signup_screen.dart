@@ -1,7 +1,9 @@
 import 'package:async_button/async_button.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:ecommerce_app/app/FrameSize.dart';
 import 'package:ecommerce_app/app/app_assets.dart';
+import 'package:ecommerce_app/app/app_colors.dart';
 import 'package:ecommerce_app/presentation/components/head_line.dart';
 import 'package:ecommerce_app/presentation/components/my_button.dart';
 import 'package:ecommerce_app/presentation/components/my_text.dart';
@@ -27,10 +29,10 @@ class SignUpScreen extends StatelessWidget {
 
     return SafeArea(
         child: Scaffold(
-      backgroundColor: const Color(0xffF9F9F9),
+      backgroundColor: AppColors.backgroundColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(size.width * 0.050),
+          padding: EdgeInsets.all(FrameSize.padding),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const HeadLine(titleHeadLine: "Sign up"),
@@ -86,7 +88,7 @@ class SignUpScreen extends StatelessWidget {
               ),
             ),
             const Gap(30),
-            ButtonAnimation(
+            ButtonDefault(
                 width: size.width,
                 height: 50,
                 text: "SIGN UP",

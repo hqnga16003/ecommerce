@@ -11,12 +11,12 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsRouter(
-      routes:  [
+      routes:  const [
         HomeRoute(),
-        const ShopRoute(),
-        const BagRoute(),
-        const FavoritesRoute(),
-        const ProfileRoute(),
+        ShopRoute(),
+        BagRoute(),
+        FavoritesRoute(),
+        ProfileRoute(),
       ],
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
@@ -36,9 +36,9 @@ class MainScreen extends StatelessWidget {
                   icon: Icon(Icons.shopping_bag), label: "Bag"),
 
               BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite_border), label: "Favorites"),
+                  icon: Icon(Icons.favorite), label: "Favorites"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person_2_outlined), label: "Profile"),
+                  icon: Icon(Icons.person), label: "Profile"),
             ],
           ),
         );

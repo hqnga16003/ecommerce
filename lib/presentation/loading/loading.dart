@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 @RoutePage()
-class Loading extends StatefulWidget {
-  const Loading({super.key});
+class LoadingScreen extends StatefulWidget {
+  const LoadingScreen({super.key});
 
   @override
-  State<Loading> createState() => _LoadingState();
+  State<LoadingScreen> createState() => _LoadingScreenState();
 }
 
-class _LoadingState extends State<Loading> {
+class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
 

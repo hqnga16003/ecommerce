@@ -63,7 +63,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   text: forgotPasswordController.errorText.value,
                 ))),
             const Gap(30),
-            ButtonAnimation(
+            ButtonDefault(
                 width: size.width,
                 height: 50,
                 text: "SEND",

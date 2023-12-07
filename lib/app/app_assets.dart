@@ -10,7 +10,13 @@ class AppAssets {
   static const String imgClothes ="assets/img_clothes.png";
   static const String imgShoes ="assets/img_shoes.png";
   static const String imgAccessories ="assets/img_accessories.png";
-
+  static const String imgMasterCart ="assets/master_card.png";
+  static const String imgFedex ="assets/fedex.png";
+  static const String imgUsps ="assets/usps.png";
+  static const String imgDhl ="assets/dhl.png";
+  static const String imgBags ="assets/bags.png";
+  static const String imgChip ="assets/chip.png";
+  static const String imgVisa ="assets/visa.png";
   //icon
   static const String icGoogle ="assets/ic_google.png";
   static const String icFacebook ="assets/ic_facebook.png";
@@ -19,8 +25,5 @@ class AppAssets {
   static const String icFavorite ="assets/ic_favorite.png";
   static const String icProfile ="assets/ic_profile.png";
   static const String icShop ="assets/ic_shop.png";
-
-
-
 
 }

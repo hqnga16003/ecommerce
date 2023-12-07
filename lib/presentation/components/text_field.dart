@@ -90,3 +90,51 @@ class TextFieldSearch extends StatelessWidget {
     );
   }
 }
+
+
+class TextFieldInputCart extends StatelessWidget {
+  const TextFieldInputCart({super.key, required this.hintText});
+  final String hintText;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: const TextStyle(color: Color(0xff9B9B9B),fontSize: 14,fontWeight: FontWeight.w500),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
+      ),
+
+    );
+  }
+}
+
+
+class TextFieldInput extends StatelessWidget {
+  const TextFieldInput({super.key, required this.hintText, required this.textEditingController});
+  final String hintText;
+  final TextEditingController textEditingController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: textEditingController,
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: const TextStyle(color: Color(0xff9B9B9B),fontSize: 14,fontWeight: FontWeight.w500),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
+      ),
+
+    );
+  }
+}

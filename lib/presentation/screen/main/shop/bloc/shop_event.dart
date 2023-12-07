@@ -1,21 +1,38 @@
+import '../../../../../model/product.dart';
+
 abstract class ShopEvent {}
-class GetAllCategories extends ShopEvent {}
-class ChangeListViewProducts extends ShopEvent{
-  final bool isGrid;
-  ChangeListViewProducts(this.isGrid);
-}
 
-class GetProductsByCategory extends ShopEvent{
+class GetProductsEvent extends ShopEvent {
   final String nameCategory;
-  GetProductsByCategory(this.nameCategory);
+
+  GetProductsEvent(this.nameCategory);
 }
 
-class SortListProductView extends ShopEvent{
-  final String nameSort;
-  SortListProductView(this.nameSort);
+class ChangeViewProductsEvent extends ShopEvent {
+
 }
-class FiltersListProductEvent extends ShopEvent{
+class SortListProductEvent extends ShopEvent {
+  final String nameSort;
+  SortListProductEvent(this.nameSort);
+}
+
+class FiltersProductsEvent extends ShopEvent {
   final double priceStart;
   final double priceEnd;
-  FiltersListProductEvent(this.priceStart, this.priceEnd);
+  final List<String> colors;
+  final List<String> sizes;
+  final List<String> categories;
+  final List<String> brands;
+
+  FiltersProductsEvent(this.priceStart, this.priceEnd, this.colors,
+      this.sizes, this.categories, this.brands);
 }
+
+
+class AddToCartEvent extends ShopEvent {
+  final Product product;
+
+  AddToCartEvent(this.product);
+}
+
+

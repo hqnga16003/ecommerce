@@ -38,7 +38,7 @@ class LoginScreen extends StatelessWidget {
       bloc: loginBloc,
       listener: (BuildContext context, state) async {
         if (state is LoginLoading) {
-          AutoRouter.of(context).push(const Loading());
+          AutoRouter.of(context).push(const LoadingRoute());
         }
         if (state is LoginSuccess) {
           Future.delayed(const Duration(seconds: 3), () {
@@ -57,9 +57,9 @@ class LoginScreen extends StatelessWidget {
                             onPressed: () {
                               AutoRouter.of(context).pop();
                             },
-                            child: Text("Close"))
+                            child: const Text("Close"))
                       ],
-                      title: Text("Login Failure"),
+                      title: const Text("Login Failure"),
                       content: Text(state.error),
                     ));
           });

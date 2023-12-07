@@ -22,7 +22,7 @@ class HeadLine extends StatelessWidget {
         Text(
           titleHeadLine,
           style: const TextStyle(
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             fontSize: 34,
           ),
         )

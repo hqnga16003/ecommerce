@@ -4,42 +4,16 @@ import '../../../../../model/category.dart';
 
 class ShopState {}
 
-class AllDataLoadingState extends ShopState {}
+class ProductsLoadingState extends ShopState {}
 
-class AllDataLoadedState extends ShopState {
-  final List<Category> listCategories;
-
-  AllDataLoadedState(this.listCategories);
+class ProductsLoadedState  extends ShopState {
+  final List<Product> listProduct ;
+  final String title;
+  ProductsLoadedState(this.listProduct, this.title);
 }
-
-class GridViewState extends ShopState {}
-
-class ListViewState extends ShopState {}
-
-class ProductSortListViewState extends ShopState {
-  final List<Product> list;
-  final String nameSort;
-  ProductSortListViewState(this.list, this.nameSort);
-}
-
-class FilteredProductsState  extends ShopState {
-  final List<Product> list ;
-  FilteredProductsState (this.list);
+class ProductsErrorState  extends ShopState {
+  final String err;
+  ProductsErrorState(this.err);
 }
 
 
-class AllDataErrorState extends ShopState {
-  final String message;
-
-  AllDataErrorState(this.message);
-}
-
-class GetProductLoadingState extends ShopState {}
-
-class GetProductLoadedState extends ShopState {
-  final String nameCategory;
-
-  GetProductLoadedState(this.nameCategory);
-}
-
-class GetProductErrorState extends ShopState {}

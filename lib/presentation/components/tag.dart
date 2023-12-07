@@ -14,7 +14,7 @@ class Tag extends StatelessWidget {
           color: color,
           borderRadius: BorderRadius.circular(15)),
       padding:
-      const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+      const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
       child:  Text(
         title,
         style: const TextStyle(

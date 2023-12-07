@@ -1,24 +1,19 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:ecommerce_app/presentation/router/AppRouter.gr.dart';
 import 'package:ecommerce_app/presentation/screen/main/home/home_bloc/home_bloc.dart';
-import 'package:ecommerce_app/presentation/screen/main/home/home_bloc/home_event.dart';
-import 'package:ecommerce_app/presentation/screen/main/home/home_bloc/home_state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-
-import '../../../../../app/app_assets.dart';
-import '../../../../../app/locator/locator.dart';
 import '../../../../components/card_item_new.dart';
 import '../../../../components/my_button.dart';
 import '../../../../components/my_cached_network_Img.dart';
 import '../../../../components/row_title.dart';
+import '../home_bloc/home_state.dart';
 
 class HomePageFirst extends StatelessWidget {
   const HomePageFirst({super.key, required this.homeBloc});
 
   final HomeBloc homeBloc;
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -69,16 +64,19 @@ class HomePageFirst extends StatelessWidget {
                   builder: (BuildContext context, HomeState state) {
                     if (state is AllProductsLoadedState) {
                       return SizedBox(
-                        height: size.height * 0.20,
+                        height: size.height * 0.35,
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemCount: state.listProductsNew.length,
                           itemBuilder: (context, index) {
-                            return SizedBox(
-                                child: CardItemNew(
+                            return CardItemNew(
                               size: size,
                               product: state.listProductsNew[index],
-                            ));
+                              onTap: () {
+                                AutoRouter.of(context).push(ProductDetail(
+                                    product: state.listProductsNew[index]));
+                              },
+                            );
                           },
                           separatorBuilder: (BuildContext context, int index) =>
                               const Gap(20),
