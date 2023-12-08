@@ -53,7 +53,9 @@ class _BagScreenState extends State<BagScreen> {
       ),
       body: Padding(
           padding: EdgeInsets.all(size.width * 0.05),
-          child: BlocBuilder(
+          child: BlocConsumer(listener: (context, state) {
+
+          },
             bloc: cartBloc,
             builder: (context, state) {
               if (state is CartLoadingState) {

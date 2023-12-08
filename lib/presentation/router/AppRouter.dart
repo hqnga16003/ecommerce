@@ -13,10 +13,10 @@ class AppRouter extends $AppRouter {
     AutoRoute(page: Splash.page),
 
     AutoRoute(page: LoadingRoute.page),
-    AutoRoute(page: LoginRoute.page,initial: true),
+    AutoRoute(page: LoginRoute.page),
     AutoRoute(page: SignUpRoute.page,),
     AutoRoute(page: ForgotPasswordRoute.page,),
-    AutoRoute(page: MainRoute.page,children: [
+    AutoRoute(page: MainRoute.page,initial: true,children: [
       AutoRoute(page: HomeRoute.page),
       AutoRoute(page: ShopNavigation.page,initial: true,children: [
         AutoRoute(page: ShopRoute.page,initial: true),

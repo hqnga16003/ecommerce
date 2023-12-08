@@ -146,7 +146,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           TextNameProduct(text: "${widget.totalPrice + 15}\$")
                         ],
                       ),
-
+                      GooglePayButton(onError: (error) {
+                        print("error"+error.toString());
+                      },
+                        paymentConfiguration:
+                            PaymentConfiguration.fromJsonString(
+                                defaultGooglePay),
+                        paymentItems: const [PaymentItem(
+                          label: 'Total',
+                          amount: '99.99',
+                          status: PaymentItemStatus.final_price,
+                        )],
+                        type: GooglePayButtonType.buy,
+                        margin: const EdgeInsets.only(top: 15.0),
+                        onPaymentResult: onGooglePayResult,
+                        loadingIndicator: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
                     ],
                   )
                 ],

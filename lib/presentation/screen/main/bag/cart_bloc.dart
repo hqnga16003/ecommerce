@@ -36,22 +36,36 @@ class RemoveProduct extends CartEvent {
   RemoveProduct(this.productCart);
 }
 
-class CartState {}
+abstract class CartState {
+  bool get isSteady;
+  bool get isTransient => !isSteady;
+}
 
-class CartLoadingState extends CartState {}
+class CartLoadingState extends CartState {
+  @override
+  bool get isSteady => true;
+}
 
 class CartLoadedState extends CartState {
   final List<ProductCart> list;
-
+  @override
+  bool get isSteady => true;
   CartLoadedState(this.list);
 }
 
 class CartErrorState extends CartState {
   final String err;
-
+  @override
+  bool get isSteady => true;
   CartErrorState(this.err);
 }
 
+
+class IncrementProductState extends CartState {
+  @override
+  bool get isSteady => false;
+
+}
 @Singleton()
 @injectable
 class CartBloc extends Bloc<CartEvent, CartState> {
@@ -59,7 +73,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   List<ProductCart> listProductCart = [];
 
 
-  CartBloc(this.firebaseFireStoreRepository) : super(CartState()) {
+  CartBloc(this.firebaseFireStoreRepository) : super(CartLoadingState()) {
     on<AddToCartEvent>((event, emit) async {
       emit(CartLoadingState());
       await firebaseFireStoreRepository.addToCart(

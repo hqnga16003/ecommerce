@@ -35,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final PageController controller = PageController(initialPage: 0);
     return SafeArea(
       child: Scaffold(
